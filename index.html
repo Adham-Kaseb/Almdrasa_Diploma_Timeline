@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diploma Timeline | الدبلومة التعليمية</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header__left">
+        <button class="header__menu-btn" id="menuBtn" aria-label="Toggle Menu">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <h1 class="header__title">
+          <span class="logo-icon">🎓</span>
+          <span
+            class="title-text"
+            data-en="Diploma Timeline"
+            data-ar="الدبلومة التعليمية"
+            >Diploma Timeline</span
+          >
+        </h1>
+      </div>
+
+      <div class="header__center">
+        <div class="search-container">
+          <svg
+            class="search-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search courses..."
+            data-placeholder-en="Search courses..."
+            data-placeholder-ar="ابحث عن الدورات..."
+          />
+          <span class="search-results-count" id="searchCount"></span>
+        </div>
+      </div>
+
+      <div class="header__right">
+        <button
+          class="header__progress-btn"
+          id="progressBtn"
+          aria-label="Toggle Progress"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 2v20M2 12h20"></path>
+            <!-- Placeholder icon, will replace with chart icon -->
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </button>
+        <button
+          class="header__filter-btn"
+          id="filterBtn"
+          aria-label="Open Filters"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polygon
+              points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+            ></polygon>
+          </svg>
+          <span class="filter-badge" id="filterBadge">0</span>
+        </button>
+        <button
+          class="header__lang-btn"
+          id="langBtn"
+          aria-label="Toggle Language"
+        >
+          <span class="lang-text">AR</span>
+        </button>
+        <button
+          class="header__theme-btn"
+          id="themeBtn"
+          aria-label="Toggle Theme"
+        >
+          <svg
+            class="theme-icon-light"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg
+            class="theme-icon-dark"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Filter Panel -->
+    <aside class="filter-panel" id="filterPanel">
+      <div class="filter-panel__header">
+        <h2 class="filter-panel__title" data-en="Filters" data-ar="الفلاتر">
+          Filters
+        </h2>
+        <button
+          class="filter-panel__close"
+          id="filterCloseBtn"
+          aria-label="Close"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="filter-panel__content">
+        <div class="filter-section">
+          <h3 class="filter-section__title" data-en="Tracks" data-ar="المسارات">
+            Tracks
+          </h3>
+          <div class="filter-pills" id="trackFilters"></div>
+        </div>
+
+        <div class="filter-section">
+          <h3
+            class="filter-section__title"
+            data-en="Difficulty"
+            data-ar="المستوى"
+          >
+            Difficulty
+          </h3>
+          <div class="filter-pills" id="difficultyFilters">
+            <button class="filter-pill" data-difficulty="Beginner">
+              <span data-en="Beginner" data-ar="مبتدئ">Beginner</span>
+            </button>
+            <button class="filter-pill" data-difficulty="Intermediate">
+              <span data-en="Intermediate" data-ar="متوسط">Intermediate</span>
+            </button>
+            <button class="filter-pill" data-difficulty="Advanced">
+              <span data-en="Advanced" data-ar="متقدم">Advanced</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <button
+            class="btn btn--secondary btn--full-width"
+            id="clearFiltersBtn"
+          >
+            <span data-en="Clear All Filters" data-ar="مسح جميع الفلاتر"
+              >Clear All Filters</span
+            >
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__content">
+        <nav class="sidebar__nav" id="sidebarNav"></nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+      <div class="content-wrapper" id="contentWrapper"></div>
+    </main>
+
+    <!-- Right Progress Dashboard -->
+    <aside class="progress-dashboard" id="progressDashboard">
+      <div class="progress-dashboard__content">
+        <h2
+          class="progress-dashboard__title"
+          data-en="Your Progress"
+          data-ar="تقدمك"
+        >
+          Your Progress
+        </h2>
+
+        <div class="progress-circles" id="progressCircles">
+          <div class="progress-circle-item">
+            <svg class="progress-circle" viewBox="0 0 120 120">
+              <circle
+                class="progress-circle__bg"
+                cx="60"
+                cy="60"
+                r="52"
+              ></circle>
+              <circle
+                class="progress-circle__fill"
+                cx="60"
+                cy="60"
+                r="52"
+                id="overallProgress"
+              ></circle>
+            </svg>
+            <div class="progress-circle__label">
+              <span class="progress-circle__percent" id="overallPercent"
+                >0%</span
+              >
+              <span
+                class="progress-circle__text"
+                data-en="Overall"
+                data-ar="الكلي"
+                >Overall</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="track-progress" id="trackProgress"></div>
+
+        <div class="achievements" id="achievements">
+          <h3
+            class="achievements__title"
+            data-en="Achievements"
+            data-ar="الإنجازات"
+          >
+            Achievements
+          </h3>
+          <div class="achievements__list" id="achievementsList"></div>
+        </div>
+
+        <div class="next-course" id="nextCourse">
+          <h3 class="next-course__title" data-en="Up Next" data-ar="التالي">
+            Up Next
+          </h3>
+          <div class="next-course__content" id="nextCourseContent"></div>
+        </div>
+
+        <button class="btn btn--outline btn--full-width" id="resetProgressBtn">
+          <span data-en="Reset Progress" data-ar="إعادة تعيين التقدم"
+            >Reset Progress</span
+          >
+        </button>
+      </div>
+    </aside>
+
+    <!-- Floating Progress Indicator -->
+    <div class="floating-progress" id="floatingProgress">
+      <svg class="floating-progress__circle" viewBox="0 0 60 60">
+        <circle class="floating-progress__bg" cx="30" cy="30" r="26"></circle>
+        <circle
+          class="floating-progress__fill"
+          cx="30"
+          cy="30"
+          r="26"
+          id="floatingProgressFill"
+        ></circle>
+      </svg>
+      <span class="floating-progress__text" id="floatingProgressText">0%</span>
+    </div>
+
+    <div class="backdrop" id="backdrop"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
