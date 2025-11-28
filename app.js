@@ -703,6 +703,43 @@ function initApp() {
       searchInput.value = appState.searchQuery;
     }
   }
+
+  // Initialize Smooth Scroll (Lenis)
+  initSmoothScroll();
+}
+
+// Smooth Scroll & Parallax
+function initSmoothScroll() {
+  if (typeof Lenis === 'undefined') return;
+
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: true,
+    mouseMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+
+  requestAnimationFrame(raf);
+
+  // Parallax Effect
+  const shapes = document.querySelectorAll('.parallax-shape');
+  
+  lenis.on('scroll', ({ scroll }) => {
+    shapes.forEach((shape, index) => {
+      const speed = (index + 1) * 0.1; // Different speed for each shape
+      const yPos = scroll * speed;
+      shape.style.transform = `translateY(${yPos}px)`;
+    });
+  });
 }
 
 // Setup Event Listeners
