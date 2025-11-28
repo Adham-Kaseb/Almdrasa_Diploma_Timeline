@@ -3,7 +3,7 @@ const coursesData = {
   months: [
     {
       name_en: "Month 1: Foundations & AI",
-      name_ar: "الشهر الأول: الأساسيات والذكاء الاصطناعي",
+      name_ar: "الشهر الأول",
       weeks: [
         {
           week_en: "Week 1",
@@ -142,7 +142,7 @@ const coursesData = {
     },
     {
       name_en: "Month 2: Mastery & Career",
-      name_ar: "الشهر الثاني: الإتقان والمسار الوظيفي",
+      name_ar: "الشهر الثاني",
       weeks: [
         {
           week_en: "Week 1",
@@ -226,7 +226,7 @@ const coursesData = {
     },
     {
       name_en: "Month 3: Web Foundations",
-      name_ar: "الشهر الثالث: أساسيات البناء الويب",
+      name_ar: "الشهر الثالث",
       weeks: [
         {
           week_en: "Week 1",
@@ -350,7 +350,7 @@ const coursesData = {
     },
     {
       name_en: "Month 4: Web & JavaScript Start",
-      name_ar: "الشهر الرابع: بداية جافاسكريبت",
+      name_ar: "الشهر الرابع",
       weeks: [
         {
           week_en: "Week 1",
@@ -404,7 +404,7 @@ const coursesData = {
     },
     {
       name_en: "Month 5: JavaScript Mastery",
-      name_ar: "الشهر الخامس: إتقان جافاسكريبت",
+      name_ar: "الشهر الخامس",
       weeks: [
         {
           week_en: "Week 1",
@@ -478,7 +478,7 @@ const coursesData = {
     },
     {
       name_en: "Month 6: React & JavaScript Final",
-      name_ar: "الشهر السادس: React والمشروع النهائي للجافاسكريبت",
+      name_ar: "الشهر السادس",
       weeks: [
         {
           week_en: "Week 1",
@@ -537,7 +537,7 @@ const coursesData = {
     },
     {
       name_en: "Month 7: React Projects",
-      name_ar: "الشهر السابع: مشاريع React",
+      name_ar: "الشهر السابع",
       weeks: [
         {
           week_en: "Week 2",
@@ -575,7 +575,7 @@ const coursesData = {
     },
     {
       name_en: "Month 8: Graduation",
-      name_ar: "الشهر الثامن: التخرج",
+      name_ar: "الشهر الثامن",
       weeks: [
         {
           week_en: "Graduation",
