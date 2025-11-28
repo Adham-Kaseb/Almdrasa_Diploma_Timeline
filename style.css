@@ -43,6 +43,8 @@
   --color-red-500: rgba(192, 21, 47, 1);
   --color-orange-400: rgba(230, 129, 97, 1);
   --color-orange-500: rgba(168, 75, 47, 1);
+  /* New variable for glassmorphism header background */
+  --header-bg: rgba(var(--color-gray-200-rgb), 0.6);
 
   /* RGB versions for opacity control */
   --color-brown-600-rgb: 94, 82, 64;
@@ -508,6 +510,7 @@ pre code {
 
 .btn--full-width {
   width: 100%;
+  font-family: var(--font-family-base);
 }
 
 .btn:disabled {
@@ -1000,7 +1003,7 @@ body {
   left: 0;
   right: 0;
   height: 64px;
-  background: rgba(var(--color-gray-200-rgb, 245, 245, 245), 0.8);
+  background: rgba(255, 255, 255, 0.050);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--color-card-border);
   display: flex;
@@ -1012,7 +1015,8 @@ body {
 }
 
 [data-theme="dark"] .header {
-  background: rgba(var(--color-gray-400-rgb, 119, 124, 124), 0.15);
+  --header-bg: rgba(var(--color-gray-400-rgb), 0.6);
+  background: var(--header-bg);
 }
 
 .header__left {
@@ -1117,8 +1121,7 @@ body {
 
 .header__progress-btn,
 .header__filter-btn,
-.header__lang-btn,
-.header__theme-btn {
+.header__lang-btn {
   position: relative;
   background: var(--color-secondary);
   border: none;
@@ -1134,8 +1137,7 @@ body {
 
 .header__progress-btn:hover,
 .header__filter-btn:hover,
-.header__lang-btn:hover,
-.header__theme-btn:hover {
+.header__lang-btn:hover {
   background: var(--color-secondary-hover);
 }
 
@@ -2031,4 +2033,51 @@ body {
     right: auto;
     left: var(--space-16);
   }
+}
+
+/* Course Card Expansion */
+.course-card {
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.course-card.expanded {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.course-card__topics-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course-card__topics-list li {
+  background: var(--color-secondary);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Hidden topics handling */
+.topic-extra {
+  display: none;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity var(--duration-normal) var(--ease-standard),
+              transform var(--duration-normal) var(--ease-standard);
+}
+
+.course-card.expanded .topic-extra {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.course-card.expanded .topic-more-count {
+  display: none;
 }

@@ -350,7 +350,7 @@ const coursesData = {
     },
     {
       name_en: "Month 4: Web & JavaScript Start",
-      name_ar: "الشهر الرابع: الويب وبداية جافاسكريبت",
+      name_ar: "الشهر الرابع: بداية جافاسكريبت",
       weeks: [
         {
           week_en: "Week 1",
@@ -632,7 +632,7 @@ const coursesData = {
 
 // State Management (using JavaScript variables instead of localStorage)
 let appState = {
-  language: "en",
+  language: "ar",
   theme: "dark",
   completedCourses: [],
   filters: {
@@ -641,6 +641,7 @@ let appState = {
   },
   sidebarOpen: true,
   progressOpen: false,
+  searchQuery: "",
 };
 
 // Persist appState to localStorage
@@ -694,53 +695,53 @@ function initApp() {
 
   // Update language based on loaded state
   updateLanguage();
+
+  // Sync search input with loaded state
+  if (appState.searchQuery) {
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.value = appState.searchQuery;
+    }
+  }
 }
 
 // Setup Event Listeners
 function setupEventListeners() {
+  // Helper to safely add listener
+  const addListener = (id, event, handler) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener(event, handler);
+    }
+  };
+
   // Menu button
-  document.getElementById("menuBtn").addEventListener("click", toggleSidebar);
+  addListener("menuBtn", "click", toggleSidebar);
 
   // Language toggle
-  document.getElementById("langBtn").addEventListener("click", toggleLanguage);
+  addListener("langBtn", "click", toggleLanguage);
 
   // Theme toggle
-  document.getElementById("themeBtn").addEventListener("click", toggleTheme);
+  addListener("themeBtn", "click", toggleTheme);
 
   // Filter button
-  document
-    .getElementById("filterBtn")
-    .addEventListener("click", toggleFilterPanel);
-  document
-    .getElementById("filterCloseBtn")
-    .addEventListener("click", toggleFilterPanel);
+  addListener("filterBtn", "click", toggleFilterPanel);
+  addListener("filterCloseBtn", "click", toggleFilterPanel);
 
   // Search
-  document
-    .getElementById("searchInput")
-    .addEventListener("input", handleSearch);
+  addListener("searchInput", "input", handleSearch);
 
   // Reset progress
-  document
-    .getElementById("resetProgressBtn")
-    .addEventListener("click", resetProgress);
+  addListener("resetProgressBtn", "click", resetProgress);
 
   // Clear filters
-  document
-    .getElementById("clearFiltersBtn")
-    .addEventListener("click", clearFilters);
+  addListener("clearFiltersBtn", "click", clearFilters);
 
   // Progress toggle (mobile)
-  const progressBtn = document.getElementById("progressBtn");
-  if (progressBtn) {
-    progressBtn.addEventListener("click", toggleProgress);
-  }
+  addListener("progressBtn", "click", toggleProgress);
 
   // Backdrop click
-  const backdrop = document.getElementById("backdrop");
-  if (backdrop) {
-    backdrop.addEventListener("click", closeAllOverlays);
-  }
+  addListener("backdrop", "click", closeAllOverlays);
 
   // Window resize handler
   window.addEventListener("resize", handleResize);
@@ -972,6 +973,24 @@ function renderContent() {
 
   const filteredData = getFilteredCourses();
 
+  // Calculate total courses found
+  let totalCourses = 0;
+  filteredData.forEach(month => {
+    month.weeks.forEach(week => {
+      totalCourses += week.courses.length;
+    });
+  });
+
+  // Update search count display
+  const searchCount = document.getElementById("searchCount");
+  if (appState.searchQuery) {
+    searchCount.textContent = `${totalCourses} ${
+      isArabic ? "نتيجة" : "results"
+    }`;
+  } else {
+    searchCount.textContent = "";
+  }
+
   if (filteredData.length === 0) {
     wrapper.innerHTML = `
       <div style="text-align: center; padding: 60px 20px; color: var(--color-text-secondary);">
@@ -1040,6 +1059,12 @@ function renderCourseCard(course, monthIndex, weekIndex) {
     .join("")
     .substring(0, 2);
 
+  // Topics logic
+  const topics = course.topics_en || [];
+  const visibleTopics = topics.slice(0, 3);
+  const hiddenTopics = topics.slice(3);
+  const hasHidden = hiddenTopics.length > 0;
+
   return `
     <div class="course-card ${
       isCompleted ? "completed" : ""
@@ -1070,23 +1095,29 @@ function renderCourseCard(course, monthIndex, weekIndex) {
         }</p>
         <p class="course-card__date">📅 ${course.date}</p>
         ${
-          course.topics_en && course.topics_en.length > 0
+          topics.length > 0
             ? `
           <div class="course-card__topics">
             <p class="course-card__topics-title">${
               isArabic ? "المواضيع" : "Topics"
             }:</p>
             <ul class="course-card__topics-list">
-              ${course.topics_en
-                .slice(0, 3)
+              ${visibleTopics
                 .map((topic) => `<li>${topic}</li>`)
                 .join("")}
               ${
-                course.topics_en.length > 3
-                  ? `<li>${
+                hasHidden
+                  ? hiddenTopics
+                      .map((topic) => `<li class="topic-extra">${topic}</li>`)
+                      .join("")
+                  : ""
+              }
+              ${
+                hasHidden
+                  ? `<li class="topic-more-count">${
                       isArabic
-                        ? `+${course.topics_en.length - 3} أخرى`
-                        : `+${course.topics_en.length - 3} more`
+                        ? `+${hiddenTopics.length} أخرى`
+                        : `+${hiddenTopics.length} more`
                     }</li>`
                   : ""
               }
@@ -1126,8 +1157,12 @@ function getDifficultyArabic(difficulty) {
 
 // Handle Course Click
 function handleCourseClick(e) {
-  if (e.target.tagName === "BUTTON") return;
-  // Could expand card or show modal here
+  // Prevent expansion if clicking the button (handled by stopPropagation in inline onclick, but good to be safe)
+  if (e.target.tagName === "BUTTON" || e.target.closest("button")) return;
+  
+  const card = e.currentTarget;
+  // Toggle expanded class
+  card.classList.toggle("expanded");
 }
 
 // Toggle Course Completion
@@ -1357,33 +1392,51 @@ function getFilteredCourses() {
     }));
   }
 
+  // Apply Search Filter
+  if (appState.searchQuery) {
+    const query = appState.searchQuery;
+    filtered = filtered.map((month) => ({
+      ...month,
+      weeks: month.weeks.map((week) => ({
+        ...week,
+        courses: week.courses.filter((course) => {
+          const searchableText = [
+            course.title_en,
+            course.title_ar,
+            course.instructor_en,
+            course.instructor_ar,
+            ...(course.topics_en || []),
+          ]
+            .join(" ")
+            .toLowerCase();
+          return searchableText.includes(query);
+        }),
+      })),
+    }));
+  }
+
+  // Filter out empty weeks and months
+  filtered = filtered.map(month => ({
+    ...month,
+    weeks: month.weeks.filter(week => week.courses.length > 0)
+  })).filter(month => month.weeks.length > 0);
+
   return filtered;
 }
 
 // Handle Search
 function handleSearch(e) {
-  const query = e.target.value.toLowerCase();
-  const cards = document.querySelectorAll(".course-card");
-  let visibleCount = 0;
-
-  cards.forEach((card) => {
-    const text = card.textContent.toLowerCase();
-    if (text.includes(query)) {
-      card.style.display = "";
-      visibleCount++;
-    } else {
-      card.style.display = "none";
-    }
-  });
-
-  const searchCount = document.getElementById("searchCount");
-  if (query) {
-    searchCount.textContent = `${visibleCount} ${
-      appState.language === "ar" ? "نتيجة" : "results"
-    }`;
-  } else {
-    searchCount.textContent = "";
-  }
+  appState.searchQuery = e.target.value.toLowerCase().trim();
+  renderContent();
+  
+  // Update search count (optional, can be done in renderContent or here)
+  // But since renderContent re-renders everything, we might want to update the count separately or let renderContent handle it.
+  // Actually, let's let renderContent handle the "No results" view, but we might want to update the count badge if we had one.
+  // The original code updated #searchCount. Let's keep that behavior but based on filtered results.
+  // However, getFilteredCourses is called inside renderContent.
+  // Let's update the search count AFTER renderContent is called, or inside it.
+  // For simplicity, let's just trigger renderContent, and we'll update the count display inside renderContent or a separate helper called by it.
+  // Wait, the original code updated #searchCount. Let's add a helper to update that count.
 }
 
 // Calculate Progress
