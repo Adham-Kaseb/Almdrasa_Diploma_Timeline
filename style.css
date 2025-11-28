@@ -1651,6 +1651,7 @@ body {
   overflow-y: auto;
   z-index: 900;
   transition: all var(--duration-slow) var(--ease-standard);
+  scroll-behavior: smooth;
 }
 
 [dir="rtl"] .progress-dashboard {
