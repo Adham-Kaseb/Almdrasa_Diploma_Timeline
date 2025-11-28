@@ -1244,6 +1244,7 @@ body {
 
 .filter-panel__content {
   padding: var(--space-24);
+  font-family: var(--font-family-base);
 }
 
 .filter-section {
@@ -1271,6 +1272,7 @@ body {
   border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-base);
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-standard);
 }
